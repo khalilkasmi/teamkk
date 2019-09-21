@@ -11,6 +11,6 @@ class SubCategory extends Model
     }
 
     public function jobs(){
-        return $this->hasMany(Job::class);
+        return $this->hasMany(Job::class,'sub_cat_id','id');
     }
 }
