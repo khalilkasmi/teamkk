@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Feedback;
 use App\Job;
+use App\QueryFilters\JobsFilters;
 use App\SubCategory;
 use App\User;
 use Illuminate\Http\Request;
@@ -66,9 +67,10 @@ class JobController extends Controller
      * @param  \App\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job)
+    public function destroy($job)
     {
-        return response()->json(Job::deleted($job->id),200);
+        $job = Job::find($job);
+        $job->delete();
 
     }
 
@@ -123,4 +125,12 @@ class JobController extends Controller
 
 
         }
+
+    public function search(JobsFilters $filters)
+    {
+        return Job::filterBy($filters)->get();
+    }
+
+
+
 }

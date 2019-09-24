@@ -12,20 +12,11 @@ class FeedbackController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($job)
     {
-        //
+        return Feedback::where('job_id',$job)->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,42 +26,19 @@ class FeedbackController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $feedback = new Feedback();
+        $feedback->comment = $request->input('comment');
+        $feedback->rating = $request->input('rating');
+        $feedback->job_id = $request->input('job_id');
+        $feedback->user_id = $request->input('user_id');
+
+        $feedback->save();
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Feedback  $feedback
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Feedback $feedback)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Feedback  $feedback
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Feedback $feedback)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Feedback  $feedback
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Feedback $feedback)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -78,8 +46,9 @@ class FeedbackController extends Controller
      * @param  \App\Feedback  $feedback
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Feedback $feedback)
+    public function destroy($feedback)
     {
-        //
+        $feed = Feedback::find($feedback);
+        $feed->delete();
     }
 }

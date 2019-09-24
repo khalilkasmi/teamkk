@@ -19,6 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('user','UserController');
 Route::resource('job','JobController');
-Route::get('jobs/{subcat}','JobController@jobBySubCat');
-Route::get('jobs/get/ratingTop','JobController@jobByRatingTop');
-Route::get('jobs/get/recent','JobController@latestJobs');
+Route::resource('portfolio','PortfolioController');
+Route::resource('feedback','FeedbackController');
+Route::get('jobs/subcat/{subcat}','JobController@jobBySubCat');
+Route::get('jobs/ratingTop','JobController@jobByRatingTop');
+Route::get('jobs/recent','JobController@latestJobs');
+Route::get('jobs/search','JobController@search');

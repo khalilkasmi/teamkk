@@ -16,9 +16,10 @@ class CreateImagesPortfoliosTable extends Migration
         Schema::create('images_portfolios', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('image_link');
+            $table->softDeletes();
 
             $table->unsignedBigInteger('portfolio_id');
-            $table->foreign('portfolio_id')->references('id')->on('portfolios');
+            $table->foreign('portfolio_id')->references('id')->on('portfolios')->onDelete('cascade');
 
             $table->timestamps();
         });

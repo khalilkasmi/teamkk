@@ -17,6 +17,7 @@ class CreatePortfoliosTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->text('description');
+            $table->softDeletes();
 
             //$table->unsignedBigInteger('images_portfolio_id');
             //$table->foreign('images_portfolio_id')->references('id')->on('images_portfolios');

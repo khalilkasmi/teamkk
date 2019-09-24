@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ImagesPortfolio;
 use App\Portfolio;
 use Illuminate\Http\Request;
 
@@ -12,20 +13,11 @@ class PortfolioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($user)
     {
-        //
+        return Portfolio::where('user_id',$user)->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,7 +27,18 @@ class PortfolioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+            $user = $request->input('user_id');
+            $portfolio = new Portfolio();
+            $portfolio->title = $request->input('title');
+            $portfolio->description = $request->input('description');
+            $portfolio->user_id = $user;
+            $portfolio->save();
+            foreach ($request->file('images') as $img){
+                $images = new ImagesPortfolio();
+                $images->image_link = $img->getClientOriginalName();
+                $images->portfolio_id = $portfolio->id;
+                $images->save();
+            }
     }
 
     /**
@@ -46,7 +49,7 @@ class PortfolioController extends Controller
      */
     public function show(Portfolio $portfolio)
     {
-        //
+        return Portfolio::with(['images'])->where('id',$portfolio->id)->get();
     }
 
     /**
@@ -55,10 +58,6 @@ class PortfolioController extends Controller
      * @param  \App\Portfolio  $portfolio
      * @return \Illuminate\Http\Response
      */
-    public function edit(Portfolio $portfolio)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -67,10 +66,6 @@ class PortfolioController extends Controller
      * @param  \App\Portfolio  $portfolio
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Portfolio $portfolio)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -78,8 +73,9 @@ class PortfolioController extends Controller
      * @param  \App\Portfolio  $portfolio
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Portfolio $portfolio)
+    public function destroy($portfolio)
     {
-        //
+        $port = Portfolio::find($portfolio);
+        $port->delete();
     }
 }

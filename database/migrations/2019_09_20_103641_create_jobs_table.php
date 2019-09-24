@@ -19,6 +19,7 @@ class CreateJobsTable extends Migration
             $table->text('description');
             $table->string('ville');
             $table->double('price');
+            $table->softDeletes();
 
 
             $table->unsignedBigInteger('user_id');
