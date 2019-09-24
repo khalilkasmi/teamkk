@@ -7,6 +7,7 @@ use App\Job;
 use App\SubCategory;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class JobController extends Controller
 {
@@ -71,50 +72,55 @@ class JobController extends Controller
 
     }
 
-   /* public function jobBySubCat($subCat){
-        $subCateg = SubCategory::where('title','like',$subCat)->first();
+    public function jobBySubCat($subCat){
+        $subCateg = SubCategory::where('title','like',$subCat)->firstOrFail();
         return response()->json($subCateg->jobs,200);
-    }*/
+    }
 
     public function jobByRatingTop(){
-       /* $res = Feedback::where('rating','=',5)->get();
-        $jobs =  array();
-        foreach ($res as $f){
-            $jobs[] = Job::find($f->jobs_id);
-        }
-        return response()->json($jobs,200);
-
-     $res = array();
-       $jobs = Job::all();
-       foreach ($jobs as $job){
-           $feedbacks = $job->feedBack;
-           foreach ($feedbacks as $feedback){
-               if($feedback->rating != 5) continue 2;
-                else continue;
-           }
-           $res[] = $job;
-       }
-       dd($res);
-        */
-        $res = Feedback::where('rating','=',5)->get();
+        /*$feedbacks = Feedback::where('rating','=',5)->get();
         $jobs=array();
-        foreach ($res as $feed){
-            $jobs[] = Job::find($feed->job_id);
+        foreach ($feedbacks as $feedback){
+            $jobs[] = Job::find($feedback->job_id);
         }
-        $gotit= array();
+        $results= array();
         foreach($jobs as $j){
-            $hahuma= $j->feedBack;
-            foreach($hahuma as $f){
+            $feeds= $j->feedBack;
+            foreach($feeds as $f){
                 if ($f->rating ==5)
                     continue;
                 elseif($f->rating!=5)
                     continue 2;
 
             }
-            $gotit[] = $j;
+            $results[] = $j;
 
         }
-       dd($gotit);
+        return $results;
+        */
 
-    }
+        $jobs_ids = DB::table('feedback')
+            ->select('job_id')
+            ->groupBy('job_id')
+            ->havingRaw('SUM(rating not in (5)) = 0 and sum(rating = 5 ) = 1')
+            ->get();
+        $jobs = array();
+        foreach ($jobs_ids as $jobs_id){
+            $job = Job::find($jobs_id->job_id);
+            $jobs[] = $job;
+        }
+
+        return $jobs;
+
+        }
+
+        public function latestJobs(){
+
+            return DB::table('jobs')
+                ->orderBy('created_at', 'desc')
+                ->limit(5)
+                ->get();
+
+
+        }
 }

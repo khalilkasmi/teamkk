@@ -17,4 +17,7 @@ class Job extends Model
     public function subCat(){
         return $this->belongsTo(SubCategory::class);
     }
+
+
+
 }
