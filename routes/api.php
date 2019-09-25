@@ -25,3 +25,6 @@ Route::get('jobs/subcat/{subcat}','JobController@jobBySubCat');
 Route::get('jobs/ratingTop','JobController@jobByRatingTop');
 Route::get('jobs/recent','JobController@latestJobs');
 Route::get('jobs/search','JobController@search');
+
+Route::get('search','SearchController@search');
+
