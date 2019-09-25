@@ -28,6 +28,7 @@ class PortfolioController extends Controller
     public function store(Request $request)
     {
             $user = $request->input('user_id');
+            //$this->authorize('store',$user);
             $portfolio = new Portfolio();
             $portfolio->title = $request->input('title');
             $portfolio->description = $request->input('description');
@@ -76,6 +77,8 @@ class PortfolioController extends Controller
     public function destroy($portfolio)
     {
         $port = Portfolio::find($portfolio);
+        $this->authorize('delete',$port);
+
         $port->delete();
     }
 }

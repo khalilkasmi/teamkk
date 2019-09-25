@@ -50,6 +50,9 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user  = User::findOrFail($id);
+
+        $this->authorize('update',$user);
+
         $user->update($request->all());
     }
 
@@ -62,6 +65,9 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
+
+        $this->authorize('delete',$user);
+
         $user->delete();
     }
 }

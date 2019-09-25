@@ -49,6 +49,9 @@ class FeedbackController extends Controller
     public function destroy($feedback)
     {
         $feed = Feedback::find($feedback);
+
+        $this->authorize('delete',$feed);
+
         $feed->delete();
     }
 }

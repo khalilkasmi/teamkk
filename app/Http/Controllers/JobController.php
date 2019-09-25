@@ -58,6 +58,9 @@ class JobController extends Controller
     public function update(Request $request, Job $job)
     {
         $job  = Job::findOrFail($job->id);
+
+        $this->authorize('update',$job);
+
         $job->update($request->all());
     }
 
@@ -70,6 +73,7 @@ class JobController extends Controller
     public function destroy($job)
     {
         $job = Job::find($job);
+        $this->authorize('delete',$job);
         $job->delete();
 
     }

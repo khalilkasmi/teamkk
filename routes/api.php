@@ -13,18 +13,27 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+    'prefix' => 'auth'
+], function () {
+    Route::post('login', 'AuthController@login');
+    Route::post('signup', 'AuthController@signup');
+
+    Route::group([
+        'middleware' => 'auth:api'
+    ], function() {
+        Route::get('logout', 'AuthController@logout');
+        Route::get('user', 'AuthController@user');
+    });
 });
 
-Route::resource('user','UserController');
-Route::resource('job','JobController');
-Route::resource('portfolio','PortfolioController');
-Route::resource('feedback','FeedbackController');
-Route::get('jobs/subcat/{subcat}','JobController@jobBySubCat');
-Route::get('jobs/ratingTop','JobController@jobByRatingTop');
-Route::get('jobs/recent','JobController@latestJobs');
-Route::get('jobs/search','JobController@search');
-
-Route::get('search','SearchController@search');
+Route::resource('user','UserController')->middleware('auth:api');
+Route::resource('job','JobController')->middleware('auth:api');
+Route::resource('portfolio','PortfolioController')->middleware('auth:api');
+Route::resource('feedback','FeedbackController')->middleware('auth:api');
+Route::get('jobs/subcat/{subcat}','JobController@jobBySubCat')->middleware('auth:api');
+Route::get('jobs/ratingTop','JobController@jobByRatingTop')->middleware('auth:api');
+Route::get('jobs/recent','JobController@latestJobs')->middleware('auth:api');
+Route::get('jobs/search','JobController@search')->middleware('auth:api');
+Route::get('search','SearchController@search')->middleware('auth:api');
 
